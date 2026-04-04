@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      td {
+        border: 1px solid black;
+      }
+      table {
+        border-collapse: collapse;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="add()">Добавить число</button>
+    <table id="table"></table>
+  </body>
+  <script>
+    let numbers = [];
+    let table = document.getElementById("table");
+    let html = "";
+
+    for (let i = 0; i < 30; i++) {
+      let num = Math.floor(Math.random() * 100);
+      numbers.push(num);
+
+      if (i % 5 === 0) html += "<tr>";
+
+      if (num >= 50) {
+        html += `<td style="background-color: orange">${num}</td>`;
+      } else {
+        html += `<td>${num}</td>`;
+      }
+
+      if ((i + 1) % 5 === 0) html += "</tr>";
+    }
+
+    table.innerHTML = html;
+
+    function add() {
+      let num = Math.floor(Math.random() * 100);
+      numbers.push(num);
+
+      let rows = table.innerHTML.split("</tr>");
+      rows.pop();
+
+      let lastRow = rows[rows.length - 1];
+      let cells = lastRow.match(/<td/g) ? lastRow.match(/<td/g).length : 0;
+
+      if (cells >= 5) {
+        if (num >= 50) {
+          rows.push(
+            '<tr><td style="background-color: orange">' + num + "</td>",
+          );
+        } else {
+          rows.push("<tr><td>" + num + "</td>");
+        }
+      } else {
+        if (num >= 50) {
+          rows[rows.length - 1] =
+            lastRow + '<td style="background-color: orange">' + num + "</td>";
+        } else {
+          rows[rows.length - 1] = lastRow + "<td>" + num + "</td>";
+        }
+      }
+
+      table.innerHTML = rows.join("") + "</tr>";
+    }
+  </script>
+</html>

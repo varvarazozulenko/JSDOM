@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Выпадающее меню</title>
+    <style>
+      ul {
+        list-style: none;
+        padding-left: 20px;
+      }
+      li {
+        margin: 5px 0;
+      }
+      li:hover {
+        background: #f0f0f0;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Каталог товаров</h1>
+    <ul id="menu">
+      <li>
+        Книги
+        <ul class="hidden">
+          <li>Отечественные</li>
+          <li>
+            Зарубежные
+            <ul class="hidden">
+              <li>- Детективы</li>
+              <li>- Научная фантастика</li>
+              <li>- Исторические</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        DVD
+        <ul class="hidden">
+          <li>
+            Отечественные
+            <ul class="hidden">
+              <li>- Детективы</li>
+              <li>- Научная фантастика</li>
+              <li>- Исторические</li>
+            </ul>
+          </li>
+          <li>Зарубежные</li>
+        </ul>
+      </li>
+    </ul>
+
+    <script>
+      const menu = document.getElementById("menu");
+
+      for (let li of menu.querySelectorAll("li")) {
+        const firstChild = li.firstChild;
+
+        if (firstChild && firstChild.nodeType === 3) {
+          const span = document.createElement("span");
+          firstChild.before(span);
+          span.append(firstChild);
+        }
+      }
+
+      document.getElementById("menu").addEventListener("click", (event) => {
+        if (event.target.tagName !== "SPAN") return;
+
+        const li = event.target.closest("li");
+        if (!li) return;
+
+        if (li.querySelector("ul")) {
+          li.querySelector("ul").classList.toggle("hidden");
+        } else {
+          alert("Переход по ссылке");
+        }
+      });
+    </script>
+  </body>
+</html>
