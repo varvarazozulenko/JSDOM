@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-
+    <title></title>
     <style>
+
       * {
         margin: 0;
         padding: 0;
@@ -14,60 +14,155 @@
       body {
         padding: 50px;
         font-family: sans-serif;
+        background-color: #f4f4f9;
+      }
+
+      .main-container {
+        display: flex;
+        gap: 40px;
+        max-width: 900px;
+        margin-bottom: 40px;
+        align-items: flex-start;
       }
 
       .form {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        gap: 15px;
+        flex: 1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form input {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+      } 
+      /* сами формы */
+
+      .bank-label {
+        display: flex;
+        align-items: center;
         gap: 10px;
-        margin-bottom: 20px;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 5px;
+      }
+
+      .bank-icon {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
+
+      .card {
+        width: 320px;
+        height: 190px;
+        background: linear-gradient(135deg, #324c2e 0%, #8f9f8a 100%);
+        border-radius: 15px;
+        padding: 25px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-chip {
+        width: 40px;
+        height: 30px;
+        background: #ffffff;
+        border-radius: 5px;
+      }
+
+      .card-number {
+        font-size: 18px;
+        letter-spacing: 2px;
+        margin-top: 20px;
+      }
+
+      .card-bottom {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        text-transform: uppercase;
+    
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
+        background: white;
       }
-      th,
-      td {
-        padding: 10px;
+
+      th,td {
+        padding: 12px;
         text-align: left;
-        border: 1px solid #ccc;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       }
-      th {
-        background-color: #f0f0f0;
+
+      button {
+        padding: 12px;
+        background: #487950;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
       }
     </style>
+
   </head>
+
   <body>
-    <form id="myForm" class="form">
-      <input
-        type="text"
-        name="cardNumber"
-        maxlength="16"
-        placeholder="0000 0000 0000 0000"
-        oninput="this.value = this.value.replace(/\D/g, '')"
-        id="cardNumber"
-        required
-      /> <!-- ограничитель на 16 символов -->
-      <input type="text" name="name" id="fullName" placeholder="ФИО" required />
-      <input type="date" id="dateID" required />
+    <div class="main-container">
+      <form id="myForm" class="form">
+        <input type="text" id="cardNumber" maxlength="16" placeholder="0000 0000 0000 0000" required />
+        <input type="text" id="fullName" placeholder="Имя Фамилия" required />
+        <input type="date" id="dateID" required />
+        <!-- required - обязательное поле для заполнения -->
 
-      <div>
-        <input type="radio" name="bank" value="Сбербанк" checked /> Сбербанк
-        <input type="radio" name="bank" value="Райффайзен" /> Райффайзен
-        <input type="radio" name="bank" value="Тинькофф" /> Тинькофф
+        <div class="bank-options">
+          <label class="bank-label">
+            <input type="radio" name="bank" value="Сбербанк" checked />
+            <img src="https://free-png.ru/wp-content/uploads/2020/09/icon_sber-01-370x370.png" class="bank-icon" alt="Сбер"/>Сбербанк
+          </label>
+
+          <label class="bank-label">
+            <input type="radio" name="bank" value="Райффайзен" />
+            <img src="https://www.raiffeisen.ru/favicon.ico" class="bank-icon" alt="Райф"/>Райффайзен
+          </label>
+
+          <label class="bank-label">
+            <input type="radio" name="bank" value="Тинькофф" />
+            <img src="https://foni.papik.pro/uploads/posts/2024-10/foni-papik-pro-0kc9-p-kartinki-logo-tinkoff-na-prozrachnom-fone-4.png" class="bank-icon" alt="Т"/>Тинькофф
+          </label>
+        </div>
+
+        <button type="submit">Добавить карту</button>
+
+      </form>
+
+      <div class="card">
+        <div class="card-chip"></div>
+        <div class="card-number" id="previewNumber">0000 0000 0000 0000</div>
+        <div class="card-bottom">
+          <div id="previewName">Имя Фамилия</div>
+          <div id="previewDate">MM/YY</div>
+        </div>
       </div>
-
-      <button type="submit">Добавить</button>
-    </form>
+    </div>
 
     <table id="dataTable">
       <thead>
         <tr>
           <th>Номер карты</th>
           <th>ФИО</th>
-          <th>Дата окончания</th>
+          <th>Дата</th>
           <th>Банк</th>
         </tr>
       </thead>
@@ -78,23 +173,52 @@
       const form = document.getElementById("myForm");
       const tableBody = document.querySelector("#dataTable tbody");
 
+      form.oninput = () => {
+        let num = document.getElementById("cardNumber").value.replace(/\D/g, "");
+        // добавляем пробелы
+        document.getElementById("previewNumber").textContent = num.replace(/(.{4})/g, "$1 ").trim() || "0000 0000 0000 0000";
+
+        document.getElementById("previewName").textContent = document.getElementById("fullName").value.toUpperCase() || "Имя фамилия";
+
+        // метод из формата ГГГГ-ММ-ДД -> ММ/ГГ
+        const dateVal = document.getElementById("dateID").value;
+        if (dateVal) {
+          const parts = dateVal.split("-");
+          document.getElementById("previewDate").textContent = parts[1] + "/" + parts[0].slice(2);
+        }
+      };
+
+      form.onchange = () => {
+        console.log("Выбран банк: " + form.elements["bank"].value);
+      };
+
+      document.getElementById("cardNumber").onpaste = () => {
+        console.log();
+      };
+
       form.onsubmit = (e) => {
         e.preventDefault();
 
         const cardNumber = document.getElementById("cardNumber").value;
         const fullName = document.getElementById("fullName").value;
         const date = document.getElementById("dateID").value;
-
         const bank = form.elements["bank"].value;
+        
+        const selectedImg = form.querySelector('input[name="bank"]:checked').parentElement.querySelector("img").src;
 
-        const newRow = tableBody.insertRow();
+        const newRow = tableBody.insertRow(); //доб.ячейки
         newRow.insertCell(0).textContent = cardNumber;
         newRow.insertCell(1).textContent = fullName;
         newRow.insertCell(2).textContent = date;
-        newRow.insertCell(3).textContent = bank;
+        newRow.insertCell(3).innerHTML = `<img src="${selectedImg}" style="width:20px; vertical-align:middle; margin-right:5px;"> ${bank}`;
 
-        form.reset();
-      };
+        form.reset(); 
+
+        document.getElementById("previewNumber").textContent =
+          "0000 0000 0000 0000";
+        document.getElementById("previewName").textContent = "Имя фамилия";
+        document.getElementById("previewDate").textContent = "MM/YY";
+      }; //сброс данных
     </script>
   </body>
 </html>
