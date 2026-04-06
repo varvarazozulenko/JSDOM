@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        padding: 50px;
+        font-family: sans-serif;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ccc;
+      }
+      th {
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="myForm" class="form">
+      <input
+        type="text"
+        name="cardNumber"
+        maxlength="16"
+        placeholder="0000 0000 0000 0000"
+        oninput="this.value = this.value.replace(/\D/g, '')"
+        id="cardNumber"
+        required
+      /> <!-- ограничитель на 16 символов -->
+      <input type="text" name="name" id="fullName" placeholder="ФИО" required />
+      <input type="date" id="dateID" required />
+
+      <div>
+        <input type="radio" name="bank" value="Сбербанк" checked /> Сбербанк
+        <input type="radio" name="bank" value="Райффайзен" /> Райффайзен
+        <input type="radio" name="bank" value="Тинькофф" /> Тинькофф
+      </div>
+
+      <button type="submit">Добавить</button>
+    </form>
+
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>Номер карты</th>
+          <th>ФИО</th>
+          <th>Дата окончания</th>
+          <th>Банк</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      const form = document.getElementById("myForm");
+      const tableBody = document.querySelector("#dataTable tbody");
+
+      form.onsubmit = (e) => {
+        e.preventDefault();
+
+        const cardNumber = document.getElementById("cardNumber").value;
+        const fullName = document.getElementById("fullName").value;
+        const date = document.getElementById("dateID").value;
+
+        const bank = form.elements["bank"].value;
+
+        const newRow = tableBody.insertRow();
+        newRow.insertCell(0).textContent = cardNumber;
+        newRow.insertCell(1).textContent = fullName;
+        newRow.insertCell(2).textContent = date;
+        newRow.insertCell(3).textContent = bank;
+
+        form.reset();
+      };
+    </script>
+  </body>
+</html>
